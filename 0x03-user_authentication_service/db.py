@@ -6,7 +6,9 @@ from sqlalchemy import create_engine, Column, Integer, String, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+
 Base = declarative_base()
+
 
 class User(Base):
     """
@@ -18,6 +20,7 @@ class User(Base):
     hashed_password = Column(String(60), nullable=False)
     session_id = Column(String(36), nullable=True)
     reset_token = Column(String(36), nullable=True)
+
 
 class DB:
     """
