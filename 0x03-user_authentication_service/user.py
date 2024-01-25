@@ -2,10 +2,6 @@
 """The `user` model's module.
 This module defines the `User` model,
 representing a record from the `users` table.
-Attributes:
-    Base: A declarative base from SQLAlchemy for the model.
-    User (class): Represents a record from the `users` table.
-
 """
 
 from sqlalchemy import Column, Integer, String
@@ -16,14 +12,6 @@ Base = declarative_base()
 
 class User(Base):
     """Represents a record from the `users` table.
-
-    Attributes:
-        id (int): The primary key of the user record.
-        email (str): The email of the user (unique).
-        hashed_password (str): The hashed password of the user.
-        session_id (str): The session ID associated with the user.
-        reset_token (str): The reset token used for password reset.
-
     """
 
     __tablename__ = "users"
