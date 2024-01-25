@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, abort, make_response
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound, InvalidRequestError
 
+
 app = Flask(__name__)
 AUTH = Auth()
 
@@ -27,7 +28,7 @@ def register_user():
     Endpoint to register a new user.
 
     Returns:
-        jsonify: JSON response with user details if registration is successful.
+        jsonify: JSON response with user details if registration is successful
     """
     try:
         email = request.form['email']
@@ -44,14 +45,16 @@ def login():
     Endpoint to log in a user.
 
     Returns:
-        jsonify: JSON response with user details and session ID if login is successful.
+        jsonify: JSON response with user details and
+        session ID if login is successful.
     """
     try:
         email = request.form['email']
         password = request.form['password']
         if AUTH.valid_login(email, password):
             session_id = AUTH.create_session(email)
-            return jsonify({"email": email, "message": "logged in"}), 200, {'Set-Cookie': f'session_id={session_id}'}
+            return jsonify({"email": email, "message": "logged in"}), 200,
+        {'Set-Cookie': f'session_id={session_id}'}
         else:
             abort(401)
     except (NoResultFound, InvalidRequestError):
@@ -97,7 +100,8 @@ def request_reset_password():
     Endpoint to request a reset password token.
 
     Returns:
-        jsonify: JSON response with user's email and reset token if the email is valid.
+        jsonify: JSON response with user's email and
+        reset token if the email is valid.
     """
     try:
         email = request.form['email']
@@ -113,7 +117,8 @@ def update_password():
     Endpoint to update the user password using a reset token.
 
     Returns:
-        jsonify: JSON response with user's email and a password update message if successful.
+        jsonify: JSON response with user's email and a password update message
+        if successful.
     """
     try:
         email = request.form['email']
