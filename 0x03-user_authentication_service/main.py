@@ -23,7 +23,7 @@ Note:
 
 import requests
 
-# Constants for test data
+
 EMAIL = "guillaume@holberton.io"
 PASSWD = "b4l0u"
 NEW_PASSWD = "t4rt1fl3tt3"
@@ -43,11 +43,9 @@ def register_user(email: str, password: str) -> None:
         'email': email,
         'password': password,
     }
-    # Test user registration
     res = requests.post(url, data=body)
     assert res.status_code == 200
     assert res.json() == {"email": email, "message": "user created"}
-    # Test duplicate registration
     res = requests.post(url, data=body)
     assert res.status_code == 400
     assert res.json() == {"message": "email already registered"}
@@ -66,7 +64,6 @@ def log_in_wrong_password(email: str, password: str) -> None:
         'email': email,
         'password': password,
     }
-    # Test login with incorrect password
     res = requests.post(url, data=body)
     assert res.status_code == 401
 
@@ -87,7 +84,6 @@ def log_in(email: str, password: str) -> str:
         'email': email,
         'password': password,
     }
-    # Test successful login
     res = requests.post(url, data=body)
     assert res.status_code == 200
     assert res.json() == {"email": email, "message": "logged in"}
@@ -102,7 +98,6 @@ def profile_unlogged() -> None:
 
     """
     url = "{}/profile".format(BASE_URL)
-    # Test accessing profile while logged out
     res = requests.get(url)
     assert res.status_code == 403
 
@@ -122,7 +117,6 @@ def profile_logged(session_id: str) -> None:
     req_cookies = {
         'session_id': session_id,
     }
-    # Test accessing profile while logged in
     res = requests.get(url, cookies=req_cookies)
     assert res.status_code == 200
     assert "email" in res.json()
@@ -143,7 +137,6 @@ def log_out(session_id: str) -> None:
     req_cookies = {
         'session_id': session_id,
     }
-    # Test logging out
     res = requests.delete(url, cookies=req_cookies)
     assert res.status_code == 200
     assert res.json() == {"message": "Bienvenue"}
@@ -166,7 +159,6 @@ def reset_password_token(email: str) -> str:
     """
     url = "{}/reset_password".format(BASE_URL)
     body = {'email': email}
-    # Test password reset request
     res = requests.post(url, data=body)
     assert res.status_code == 200
     assert "email" in res.json()
@@ -194,14 +186,12 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
         'reset_token': reset_token,
         'new_password': new_password,
     }
-    # Test updating password
     res = requests.put(url, data=body)
     assert res.status_code == 200
     assert res.json() == {"email": email, "message": "Password updated"}
 
 
 if __name__ == "__main__":
-    # Run the complete E2E test
     register_user(EMAIL, PASSWD)
     log_in_wrong_password(EMAIL, NEW_PASSWD)
     profile_unlogged()
