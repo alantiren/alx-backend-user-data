@@ -8,16 +8,20 @@ import bcrypt
 import uuid
 from sqlalchemy.orm.exc import NoResultFound
 
+
 class Auth:
     """
     Auth class to interact with the authentication database.
     """
 
+
     def __init__(self):
         """
-        Initialize a new Auth instance with a reference to the database (DB) object.
+        Initialize a new Auth instance with a reference to the database
+        (DB) object.
         """
         self._db = DB()
+
 
     def register_user(self, email: str, password: str) -> User:
         """
@@ -38,6 +42,7 @@ class Auth:
         except NoResultFound:
             raise ValueError(f"User {email} already exists")
 
+
     def valid_login(self, email: str, password: str) -> bool:
         """
         Validate login credentials.
@@ -55,6 +60,7 @@ class Auth:
             return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
         except NoResultFound:
             return False
+
 
     def create_session(self, email: str) -> str:
         """
@@ -75,6 +81,7 @@ class Auth:
         self._db.commit()
         return session_id
 
+
     def get_user_from_session_id(self, session_id: str) -> User:
         """
         Get the user corresponding to the session ID.
@@ -83,12 +90,14 @@ class Auth:
             session_id (str): The session ID.
 
         Returns:
-            User: The User object corresponding to the session ID, or None if not found.
+            User: The User object corresponding to the session ID,
+            or None if not found.
         """
         try:
             return self._db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
+
 
     def destroy_session(self, user_id: int) -> None:
         """
@@ -103,6 +112,7 @@ class Auth:
         user = self._db.find_user_by(id=user_id)
         user.session_id = None
         self._db.commit()
+
 
     def get_reset_password_token(self, email: str) -> str:
         """
@@ -123,6 +133,7 @@ class Auth:
         self._db.commit()
         return reset_token
 
+
     def update_password(self, reset_token: str, new_password: str) -> None:
         """
         Update the user's password using a reset token.
@@ -141,6 +152,7 @@ class Auth:
             self._db.commit()
         except NoResultFound:
             raise ValueError("Invalid reset token")
+
 
     def _hash_password(self, password: str) -> bytes:
         """
