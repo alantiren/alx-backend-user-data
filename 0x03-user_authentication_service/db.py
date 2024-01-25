@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, tuple_
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
-from user import Base
+from user import Base, User
 
 
 class DB:
@@ -31,15 +33,7 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """
-        Add a new user to the database.
-
-        Args:
-            email (str): The email of the user.
-            hashed_password (str): The hashed password of the user.
-
-        Returns:
-            User: The added User object.
+        """Add a new user to the database.
         """
         try:
             new_user = User(email=email, hashed_password=hashed_password)
@@ -51,17 +45,7 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
-        """
-        Find a user in the database based on the provided query arguments.
-
-        Args:
-            **kwargs: Arbitrary keyword arguments for filtering.
-
-        Returns:
-            User: The found User object.
-
-        Raises:
-            NoResultFound: If no user is found.
+        """Find a user in the database based on the provided query arguments.
         """
         fields, values = [], []
         for key, value in kwargs.items():
@@ -78,16 +62,7 @@ class DB:
         return result
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """
-        Update a user in the database based on the user ID.
-
-        Args:
-            user_id (int): The ID of the user to update.
-            **kwargs: Arbitrary keyword arguments for updating user attributes.
-
-        Raises:
-            NoResultFound: If no user is found with the provided ID.
-            ValueError: If an invalid argument is provided.
+        """Update a user in the database based on the user ID.
         """
         user = self.find_user_by(id=user_id)
         if user is None:
