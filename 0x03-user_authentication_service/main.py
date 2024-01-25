@@ -172,7 +172,7 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
 
     Args:
         email (str): Email address for updating the password.
-        reset_token (str): Reset token obtained after a successful reset request.
+        reset_token (str): Reset token obtained after successful reset request
         new_password (str): New password for the user.
 
     Raises:
