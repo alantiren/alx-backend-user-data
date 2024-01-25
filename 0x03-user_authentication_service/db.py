@@ -1,40 +1,34 @@
 #!/usr/bin/env python3
+"""DB module
 """
-DB module for handling database operations.
-"""
-from sqlalchemy import create_engine, tuple_
-from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
-from user import Base, User
+from user import Base
 
 
 class DB:
-    """
-    DB class for handling database operations.
+    """DB class
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize a new DB instance
         """
-        Initialize a new DB instance with a connection to the database.
-        """
-        self._engine = create_engine("sqlite:///a.db", echo=False)
+        self._engine = create_engine("sqlite:///a.db", echo=True)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
     @property
-    def _session(self):
+    def _session(self) -> Session:
+        """Memoized session object
         """
-        Memoized session object.
-        """
-        if self._session_instance is None:
+        if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
-            self._session_instance = DBSession()
-        return self._session_instance
+            self.__session = DBSession()
+        return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """
